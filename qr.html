@@ -3,208 +3,326 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>QRコードメーカー by azarium</title>
+  <title>カスタムQRコードメーカー</title>
   <style>
-    :root{--bg:#071226;--card:#071624;--muted:#94a3b8;--accent:#06b6d4}
-    *{box-sizing:border-box}
-    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;margin:0;background:linear-gradient(180deg,#03101a 0%,#071226 100%);color:#e6eef6;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
-    .card{background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));padding:18px;border-radius:12px;max-width:1100px;width:100%;box-shadow:0 10px 40px rgba(2,6,23,0.6)}
-    h1{margin:0 0 6px;font-size:20px}
-    p.lead{margin:0 0 16px;color:var(--muted);font-size:13px}
-    .grid{display:flex;gap:18px;flex-wrap:wrap}
-    .controls{flex:1;min-width:320px}
-    label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
-    input[type=text], select, input[type=number], textarea{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit;font-size:14px}
-    input[type=color]{height:40px;padding:4px}
-    .row{display:flex;gap:8px}
-    .row > *{flex:1}
-    .small{font-size:12px;color:var(--muted)}
-    .controls .group{margin-bottom:12px}
-    button{background:var(--accent);border:none;padding:10px 14px;border-radius:10px;color:#042026;font-weight:600;cursor:pointer}
-    button.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
-    .preview{width:360px;min-width:240px;display:flex;flex-direction:column;align-items:center;gap:12px;padding:14px;border-radius:10px;background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent)}
-    #qrcodeWrap{background:var(--bg);padding:12px;border-radius:10px}
-    #qrcode{background:white;padding:12px;border-radius:8px;display:inline-block}
-    .tools{display:flex;gap:8px;flex-wrap:wrap}
-    .themes{display:flex;gap:8px}
-    .logo-preview{width:64px;height:64px;border-radius:8px;object-fit:contain;background:rgba(255,255,255,0.02);border:1px dashed rgba(255,255,255,0.04)}
-    .mode-tabs{display:flex;gap:8px;margin-bottom:8px}
-    .tab{padding:8px 10px;border-radius:8px;background:rgba(255,255,255,0.02);cursor:pointer}
-    .tab.active{background:var(--accent);color:#001b20}
-    .note{font-size:12px;color:var(--muted)}
-    .footer{margin-top:10px;color:var(--muted);font-size:12px}
-    pre.libbox{height:120px;overflow:auto;background:#020616;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);font-size:12px}
-    @media (max-width:980px){.grid{flex-direction:column}.preview{width:100%}}
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --accent: #06b6d4;
+      --accent-hover: #0891b2;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --border: #334155;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .card {
+      background-color: var(--card);
+      padding: 24px;
+      border-radius: 16px;
+      max-width: 850px;
+      width: 100%;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border);
+    }
+
+    h1 {
+      font-size: 20px;
+      margin-bottom: 6px;
+    }
+
+    p.lead {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 20px;
+    }
+
+    .grid {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .controls {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .mode-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      background: rgba(0, 0, 0, 0.2);
+      padding: 4px;
+      border-radius: 10px;
+    }
+
+    .tab {
+      flex: 1;
+      text-align: center;
+      padding: 8px;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+      color: var(--muted);
+      transition: all 0.2s;
+    }
+
+    .tab.active {
+      background: var(--accent);
+      color: #000;
+      font-weight: bold;
+    }
+
+    .group {
+      margin-bottom: 16px;
+    }
+
+    .row {
+      display: flex;
+      gap: 12px;
+    }
+
+    .row > * {
+      flex: 1;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    input[type=text], textarea, select {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: rgba(0, 0, 0, 0.2);
+      color: inherit;
+      font-size: 14px;
+      outline: none;
+    }
+
+    input[type=color] {
+      width: 100%;
+      height: 40px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    input[type=file] {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--accent);
+    }
+
+    .logo-preview-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .logo-preview {
+      width: 48px;
+      height: 48px;
+      border-radius: 6px;
+      object-fit: contain;
+      background: #fff;
+      border: 1px solid var(--border);
+      display: none;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    button {
+      flex: 1;
+      background: var(--accent);
+      border: none;
+      padding: 12px;
+      border-radius: 10px;
+      color: #000;
+      font-weight: bold;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    button:hover {
+      background: var(--accent-hover);
+    }
+
+    button.secondary {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    button.secondary:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    button.small-btn {
+      padding: 6px 10px;
+      font-size: 12px;
+      flex: none;
+    }
+
+    .preview {
+      width: 300px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 20px;
+      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px dashed var(--border);
+    }
+
+    #qrcodeCanvas {
+      background: white;
+      padding: 12px;
+      border-radius: 8px;
+      max-width: 100%;
+    }
+
+    .placeholder-text {
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+    }
+
+    @media (max-width: 680px) {
+      .grid { flex-direction: column; }
+      .preview { width: 100%; }
+    }
   </style>
+  <!-- QRコード生成ライブラリ (CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
 </head>
 <body>
+
   <div class="card">
-    <h1>QRコードメーカー — 完全版（ロゴ / Wi‑Fi / デザイン / オフライン対応）</h1>
-    <p class="lead">友だちに配れる1ファイル体験。QRコードに中央ロゴを重ねられ、Wi‑Fi向けQR生成、テーマ切替、オフライン埋め込みサポート付き。</p>
+    <h1>かんたんデザインQRコードメーカー</h1>
+    <p class="lead">色や形、中央ロゴをお好みでカスタマイズしてQRコードを作成できます。</p>
 
     <div class="grid">
       <div class="controls">
+        <!-- モード切替タブ -->
         <div class="mode-tabs">
-          <div class="tab active" data-mode="normal">通常</div>
-          <div class="tab" data-mode="wifi">Wi‑Fi</div>
+          <div class="tab active" data-mode="normal">URL・文字</div>
+          <div class="tab" data-mode="wifi">Wi‑Fi用</div>
         </div>
 
+        <!-- 通常モード -->
         <div id="mode-normal">
           <div class="group">
-            <label>内容（URLやメッセージ）</label>
-            <textarea id="text" rows="3" placeholder="https://example.com や 'こんにちは！' など"></textarea>
+            <label for="text">作成したいURLやメッセージ</label>
+            <textarea id="text" rows="3" placeholder="例: https://example.com や こんにちは！"></textarea>
           </div>
         </div>
 
+        <!-- Wi-Fiモード -->
         <div id="mode-wifi" style="display:none">
           <div class="group">
-            <label>SSID（ネットワーク名）</label>
-            <input id="wifi-ssid" type="text" placeholder="例: MyWiFi">
+            <label for="wifi-ssid">ネットワーク名 (SSID)</label>
+            <input id="wifi-ssid" type="text" placeholder="例: MyHome-WiFi">
           </div>
           <div class="group">
-            <label>パスワード</label>
-            <input id="wifi-pass" type="text" placeholder="例: password123">
-          </div>
-          <div class="group row">
-            <div>
-              <label>暗号化方式</label>
-              <select id="wifi-auth"><option value="WPA">WPA/WPA2</option><option value="WEP">WEP</option><option value="nopass">なし</option></select>
-            </div>
-            <div>
-              <label>隠しネットワーク</label>
-              <select id="wifi-hidden"><option value="false">いいえ</option><option value="true">はい</option></select>
-            </div>
+            <label for="wifi-pass">パスワード</label>
+            <input id="wifi-pass" type="text" placeholder="例: password1234">
           </div>
         </div>
 
+        <!-- カスタマイズ機能 -->
         <div class="group row">
           <div>
-            <label>サイズ（px）</label>
-            <input type="number" id="size" value="360" min="64" max="2000">
+            <label for="fgColor">QRコードの色</label>
+            <input type="color" id="fgColor" value="#000000">
           </div>
           <div>
-            <label>余白（モジュール数）</label>
-            <input type="number" id="margin" value="2" min="0" max="10">
-          </div>
-        </div>
-
-        <div class="group row">
-          <div>
-            <label>前景色</label>
-            <input type="color" id="fg" value="#000000">
-          </div>
-          <div>
-            <label>背景色</label>
-            <input type="color" id="bg" value="#ffffff">
+            <label for="bgColor">背景の色</label>
+            <input type="color" id="bgColor" value="#ffffff">
           </div>
         </div>
 
         <div class="group">
-          <label>誤り訂正レベル</label>
-          <select id="ecLevel">
-            <option value="L">L — 低（7%）</option>
-            <option value="M" selected>M — 中（15%）</option>
-            <option value="Q">Q — 高（25%）</option>
-            <option value="H">H — 最高（30%）</option>
+          <label for="dotStyle">ドットの形状</label>
+          <select id="dotStyle">
+            <option value="square">四角（標準）</option>
+            <option value="dots">丸（ドット）</option>
           </select>
         </div>
 
+        <!-- ロゴ設定 -->
         <div class="group">
-          <label>ロゴ（中央に重ねる）</label>
-          <div class="row">
-            <input type="file" id="logoFile" accept="image/*">
-            <button id="clearLogo" class="ghost">消す</button>
-          </div>
-          <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
-            <img id="logoPreview" class="logo-preview" src="" alt="ロゴプレビュー" style="display:none">
-            <div class="small">初期プリセット:</div>
-            <select id="presetLogo">
-              <option value="none">— なし —</option>
-              <option value="images/azarasi.png">images/azarasi.png</option>
-              <option value="https://azarasimidi.f5.si/images/azarasi.png">Azaponサイトの画像（外部）</option>
-            </select>
+          <label>中央ロゴ画像</label>
+          <input type="file" id="logoFile" accept="image/*">
+          <div class="logo-preview-wrapper">
+            <img id="logoPreview" class="logo-preview" alt="ロゴプレビュー">
+            <button id="clearLogo" class="secondary small-btn" style="display:none">ロゴを消す</button>
           </div>
         </div>
 
-        <div class="group">
-          <label>デザインモード</label>
-          <div class="themes">
-            <button data-theme="simple" class="ghost">シンプル（軽め）</button>
-            <button data-theme="azapon" class="ghost">Azapon（派手め）</button>
-            <button data-theme="rainbow" class="ghost">虹グラデ</button>
-            <button data-theme="blueglow" class="ghost">青く光る</button>
-          </div>
+        <!-- アクションボタン -->
+        <div class="btn-group">
+          <button id="generate">QRコードを作る</button>
+          <button id="download" class="secondary">画像として保存</button>
         </div>
-
-        <div class="group row">
-          <button id="generate">生成する</button>
-          <button id="download" class="ghost">PNGでダウンロード</button>
-        </div>
-
-        <div class="group tools">
-          <button id="copyLink" class="ghost">画像データURLをコピー</button>
-          <button id="copyText" class="ghost">テキストをコピー</button>
-          <button id="shareWiFi" class="ghost">Wi‑Fi情報をコピー</button>
-        </div>
-
-        <div class="group">
-          <label>オフライン埋め込み（qrcodeライブラリ）</label>
-          <div class="small">既にライブラリを持っている場合はここに貼り付けて「ライブラリを適用」。貼らないとCDNから読み込みます（インターネット接続が必要）。</div>
-          <pre id="libbox" class="libbox" contenteditable></pre>
-          <div style="display:flex;gap:8px;margin-top:6px">
-            <button id="applyLib" class="ghost">ライブラリを適用</button>
-            <button id="loadCDN" class="ghost">CDNから読み込む（速い）</button>
-          </div>
-        </div>
-
-        <div class="footer">注意：ロゴを入れるとき、他人・企業の著作物を勝手に使わないでください。商用利用時は権利確認を。</div>
       </div>
 
+      <!-- プレビュー表示エリア -->
       <div class="preview">
-        <div id="qrcodeWrap">
-          <div id="qrcode">QRコードがここに表示されます</div>
-        </div>
-        <div class="small">右クリックで画像保存／またはダウンロードボタンを使ってPNG保存</div>
-        <div style="width:100%">
-          <div class="small">ログ</div>
-          <div id="log" class="note"></div>
-        </div>
+        <canvas id="qrcodeCanvas" style="display:none"></canvas>
+        <div id="placeholder" class="placeholder-text">ここにQRコードが<br>表示されます</div>
       </div>
     </div>
   </div>
 
   <script>
-    // --- lightweight helper to dynamically load code pasted into libbox ---
-    function applyUserLibrary(code) {
-      // create blob and load as script
-      const blob = new Blob([code], {type: 'application/javascript'});
-      const url = URL.createObjectURL(blob);
-      return new Promise((resolve, reject) => {
-        const s = document.createElement('script');
-        s.src = url;
-        s.onload = () => { URL.revokeObjectURL(url); resolve(); };
-        s.onerror = (e) => { URL.revokeObjectURL(url); reject(e); };
-        document.head.appendChild(s);
-      });
-    }
-
-    // References to elements
+    // エレメントの取得
     const elText = document.getElementById('text');
-    const elSize = document.getElementById('size');
-    const elMargin = document.getElementById('margin');
-    const elFg = document.getElementById('fg');
-    const elBg = document.getElementById('bg');
-    const elEC = document.getElementById('ecLevel');
+    const fgColor = document.getElementById('fgColor');
+    const bgColor = document.getElementById('bgColor');
+    const dotStyle = document.getElementById('dotStyle');
+    const logoFile = document.getElementById('logoFile');
+    const logoPreview = document.getElementById('logoPreview');
+    const clearLogo = document.getElementById('clearLogo');
+    
     const btnGen = document.getElementById('generate');
     const btnDownload = document.getElementById('download');
-    const btnCopyLink = document.getElementById('copyLink');
-    const btnCopyText = document.getElementById('copyText');
-    const btnShareWiFi = document.getElementById('shareWiFi');
-    const qrcodeContainer = document.getElementById('qrcode');
-    const libbox = document.getElementById('libbox');
-    const applyLib = document.getElementById('applyLib');
-    const loadCDN = document.getElementById('loadCDN');
-    const logEl = document.getElementById('log');
+    const canvas = document.getElementById('qrcodeCanvas');
+    const placeholder = document.getElementById('placeholder');
 
     const tabs = document.querySelectorAll('.tab');
     const modeNormal = document.getElementById('mode-normal');
@@ -212,179 +330,185 @@
 
     const wifiSsid = document.getElementById('wifi-ssid');
     const wifiPass = document.getElementById('wifi-pass');
-    const wifiAuth = document.getElementById('wifi-auth');
-    const wifiHidden = document.getElementById('wifi-hidden');
 
-    const logoFile = document.getElementById('logoFile');
-    const logoPreview = document.getElementById('logoPreview');
-    const clearLogo = document.getElementById('clearLogo');
-    const presetLogo = document.getElementById('presetLogo');
+    let currentMode = 'normal';
+    let userLogoData = null;
 
-    let lastDataUrl = null;
-    let currentTheme = 'simple';
-    let userLogoData = null; // data URL
+    // タブ切り替え処理
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentMode = tab.dataset.mode;
 
-    // handle tabs
-    tabs.forEach(t => t.addEventListener('click', () => {
-      tabs.forEach(x=>x.classList.remove('active'));
-      t.classList.add('active');
-      const m = t.dataset.mode;
-      if (m === 'wifi') { modeNormal.style.display='none'; modeWifi.style.display='block'; }
-      else { modeNormal.style.display='block'; modeWifi.style.display='none'; }
-    }));
-
-    // preset logo selection
-    presetLogo.addEventListener('change', () => {
-      const v = presetLogo.value;
-      if (v === 'none') { logoPreview.style.display='none'; userLogoData = null; logoFile.value = ''; return; }
-      // try to load as url
-      logoPreview.src = v;
-      logoPreview.style.display = 'block';
-      userLogoData = v;
+        if (currentMode === 'wifi') {
+          modeNormal.style.display = 'none';
+          modeWifi.style.display = 'block';
+        } else {
+          modeNormal.style.display = 'block';
+          modeWifi.style.display = 'none';
+        }
+      });
     });
 
-    logoFile.addEventListener('change', (e)=>{
-      const f = e.target.files && e.target.files[0];
-      if (!f) return;
+    // ロゴファイルの読み込み処理
+    logoFile.addEventListener('change', (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+
       const reader = new FileReader();
-      reader.onload = (ev)=>{
+      reader.onload = (ev) => {
         userLogoData = ev.target.result;
         logoPreview.src = userLogoData;
         logoPreview.style.display = 'block';
+        clearLogo.style.display = 'inline-block';
       };
-      reader.readAsDataURL(f);
-    });
-    clearLogo.addEventListener('click', ()=>{ userLogoData = null; logoPreview.src=''; logoPreview.style.display='none'; logoFile.value=''; presetLogo.value='none'; });
-
-    // theme buttons
-    document.querySelectorAll('[data-theme]').forEach(b=>b.addEventListener('click', ()=>{
-      currentTheme = b.dataset.theme;
-      document.querySelectorAll('[data-theme]').forEach(x=>x.classList.remove('active'));
-      b.classList.add('active');
-      log('テーマ: '+currentTheme);
-    }));
-
-    function log(s){ logEl.textContent = s; }
-
-    function escapeForWifi(s){ return s.replace(/\\/g,'\\\\').replace(/;/g,'\\;'); }
-    function makeWifiString(){
-      const ssid = escapeForWifi(wifiSsid.value);
-      const pass = escapeForWifi(wifiPass.value);
-      const t = wifiAuth.value;
-      const hidden = wifiHidden.value === 'true' ? 'true' : 'false';
-      return `WIFI:T:${t};S:${ssid};P:${pass};H:${hidden};;`;
-    }
-
-    // load CDN by default (if user hasn't applied library)
-    let libraryLoaded = false;
-    function ensureLibrary() {
-      if (libraryLoaded) return Promise.resolve();
-      if (typeof QRCode !== 'undefined' && QRCode.toDataURL) { libraryLoaded = true; return Promise.resolve(); }
-      // try CDN
-      return new Promise((resolve,reject)=>{
-        const s = document.createElement('script');
-        s.src = 'https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js';
-        s.onload = ()=>{ libraryLoaded = true; log('qrcodeライブラリ: CDN読み込み成功'); resolve(); };
-        s.onerror = ()=>{ log('qrcodeライブラリの読み込みに失敗しました。オフライン埋め込みを試してください。'); reject(); };
-        document.head.appendChild(s);
-      });
-    }
-
-    loadCDN.addEventListener('click', ()=>{ ensureLibrary().catch(()=>{}); });
-
-    applyLib.addEventListener('click', async ()=>{
-      const code = libbox.textContent.trim();
-      if (!code) { alert('ライブラリのコードを貼り付けてください'); return; }
-      try{ await applyUserLibrary(code); libraryLoaded = true; log('qrcodeライブラリ: ユーザーコードを適用しました'); }
-      catch(e){ alert('ライブラリの適用に失敗しました: '+e); }
+      reader.readAsDataURL(file);
     });
 
-    function applyThemeToCanvas(ctx, size) {
-      // different theme effects can be applied; here we just return styles used when drawing overlay
-      // but since we use QRCode.toDataURL we will post-process the image with a canvas
-      return;
+    // ロゴ消去ボタン
+    clearLogo.addEventListener('click', () => {
+      userLogoData = null;
+      logoFile.value = '';
+      logoPreview.src = '';
+      logoPreview.style.display = 'none';
+      clearLogo.style.display = 'none';
+    });
+
+    // Wi-Fi文字列の生成
+    function makeWifiString() {
+      const ssid = wifiSsid.value.replace(/\\/g, '\\\\').replace(/;/g, '\\;');
+      const pass = wifiPass.value.replace(/\\/g, '\\\\').replace(/;/g, '\\;');
+      return `WIFI:T:WPA;S:${ssid};P:${pass};;`;
     }
 
+    // 角丸四角を描画する描画関数
+    function roundRect(ctx, x, y, w, h, r) {
+      if (w < 2 * r) r = w / 2;
+      if (h < 2 * r) r = h / 2;
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.arcTo(x + w, y, x + w, y + h, r);
+      ctx.arcTo(x + w, y + h, x, y + h, r);
+      ctx.arcTo(x, y + h, x, y, r);
+      ctx.arcTo(x, y, x + w, y, r);
+      ctx.closePath();
+    }
+
+    // QRコード生成処理
     async function generate() {
-      await ensureLibrary().catch(()=>{});
-      if (typeof QRCode === 'undefined' || !QRCode.toDataURL) { alert('QRライブラリが読み込まれていません。ライブラリを貼るかCDNを許可してください'); return; }
-
       let content = '';
-      const activeTab = document.querySelector('.tab.active').dataset.mode;
-      if (activeTab === 'wifi') content = makeWifiString();
-      else content = elText.value.trim();
-      if (!content) { alert('テキストまたはWi‑Fi情報を入力してください'); return; }
 
-      const opts = { errorCorrectionLevel: elEC.value, margin: parseInt(elMargin.value,10)||0, width: parseInt(elSize.value,10)||360, color: { dark: elFg.value, light: elBg.value } };
-      qrcodeContainer.innerHTML = '';
+      if (currentMode === 'wifi') {
+        if (!wifiSsid.value.trim()) {
+          alert('ネットワーク名（SSID）を入力してください');
+          return;
+        }
+        content = makeWifiString();
+      } else {
+        content = elText.value.trim();
+        if (!content) {
+          alert('URLまたはメッセージを入力してください');
+          return;
+        }
+      }
 
-      try{
-        const url = await QRCode.toDataURL(content, opts);
-        lastDataUrl = url;
-        // create an image and draw into canvas so we can composite logo and apply simple theme effects
-        const img = new Image(); img.src = url;
-        img.onload = ()=>{
-          const s = opts.width;
-          const canvas = document.createElement('canvas'); canvas.width = s; canvas.height = s;
-          const ctx = canvas.getContext('2d');
-          // background
-          ctx.fillStyle = elBg.value; ctx.fillRect(0,0,s,s);
-          // possibly apply theme background (simple)
-          if (currentTheme === 'azapon'){
-            // subtle radial gradient
-            const g = ctx.createRadialGradient(s/2,s/2,10,s/2,s/2,s/1.5*s);
-            g.addColorStop(0,'rgba(6,182,212,0.06)'); g.addColorStop(1,'rgba(12,8,30,0.0)'); ctx.fillStyle = g; ctx.fillRect(0,0,s,s);
-          } else if (currentTheme === 'rainbow'){
-            const g = ctx.createLinearGradient(0,0,s,0);
-            g.addColorStop(0,'#ff0044'); g.addColorStop(0.25,'#ff9900'); g.addColorStop(0.5,'#ffee00'); g.addColorStop(0.75,'#00cc66'); g.addColorStop(1,'#0066ff'); ctx.globalAlpha = 0.06; ctx.fillStyle = g; ctx.fillRect(0,0,s,s); ctx.globalAlpha =1;
-          } else if (currentTheme === 'blueglow'){
-            ctx.shadowBlur = 20; ctx.shadowColor = 'rgba(0,150,255,0.12)'; ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,0,0); ctx.shadowBlur=0;
+      try {
+        // ロゴを重ねるため、誤り訂正レベルを「H（最高: 30%）」に設定
+        const qr = QRCode.create(content, { errorCorrectionLevel: 'H' });
+        const modules = qr.modules;
+        const count = modules.size;
+        const size = 320;
+        const margin = 2;
+        const cellSize = size / (count + margin * 2);
+
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext('2d');
+
+        // 背景描画
+        ctx.fillStyle = bgColor.value;
+        ctx.fillRect(0, 0, size, size);
+
+        // ドットの描画処理
+        ctx.fillStyle = fgColor.value;
+        const isCircle = dotStyle.value === 'dots';
+
+        for (let row = 0; row < count; row++) {
+          for (let col = 0; col < count; col++) {
+            if (modules.get(row, col)) {
+              const x = (col + margin) * cellSize;
+              const y = (row + margin) * cellSize;
+
+              // 四角い検出パターン（位置合わせマーク）の周りは丸めずそのまま描画
+              const isFinderPattern = 
+                (row < 7 && col < 7) || 
+                (row < 7 && col >= count - 7) || 
+                (row >= count - 7 && col < 7);
+
+              if (isCircle && !isFinderPattern) {
+                ctx.beginPath();
+                ctx.arc(x + cellSize / 2, y + cellSize / 2, cellSize / 2 * 0.85, 0, Math.PI * 2);
+                ctx.fill();
+              } else {
+                ctx.fillRect(x, y, cellSize + 0.5, cellSize + 0.5);
+              }
+            }
           }
+        }
 
-          // draw QR image centered
-          ctx.drawImage(img, 0, 0, s, s);
+        // ロゴを重ねる処理
+        if (userLogoData) {
+          const logo = new Image();
+          logo.src = userLogoData;
+          await new Promise((resolve) => {
+            logo.onload = () => {
+              const logoSize = size * 0.22; // 中央22%の大きさ
+              const lx = (size - logoSize) / 2;
+              const ly = (size - logoSize) / 2;
 
-          // draw logo if present
-          if (userLogoData){
-            const logo = new Image(); logo.src = userLogoData;
-            logo.onload = ()=>{
-              // logo size: up to 22% of QR width when high error correction is used; scale with ecLevel
-              const baseFactor = 0.22; const ec = elEC.value; let factor = baseFactor; if (ec==='H') factor=0.27; else if (ec==='Q') factor=0.24;
-              const lw = Math.floor(s * factor); const lh = lw;
-              const lx = Math.floor((s - lw)/2); const ly = Math.floor((s - lh)/2);
-              // draw white rounded rect behind logo to keep contrast
-              ctx.fillStyle = elBg.value; roundRect(ctx, lx-6, ly-6, lw+12, lh+12, 8); ctx.fill();
-              ctx.drawImage(logo, lx, ly, lw, lh);
-              const data = canvas.toDataURL('image/png'); renderResult(data);
+              // ロゴの背景に白（指定背景色）の枠を描いて視認性を確保
+              ctx.fillStyle = bgColor.value;
+              roundRect(ctx, lx - 4, ly - 4, logoSize + 8, logoSize + 8, 6);
+              ctx.fill();
+
+              // ロゴ画像を描画
+              ctx.drawImage(logo, lx, ly, logoSize, logoSize);
+              resolve();
             };
-            logo.onerror = ()=>{ renderResult(canvas.toDataURL('image/png')); };
-          } else {
-            renderResult(canvas.toDataURL('image/png'));
-          }
-        };
-      } catch(e){ console.error(e); alert('生成に失敗しました: '+e); }
+          });
+        }
+
+        // プレビュー表示切り替え
+        placeholder.style.display = 'none';
+        canvas.style.display = 'block';
+
+      } catch (e) {
+        console.error(e);
+        alert('QRコードの生成に失敗しました');
+      }
     }
 
-    function roundRect(ctx, x, y, w, h, r){ const min = Math.min(w,h)/2; if (r>min) r=min; ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
-
-    function renderResult(dataUrl){ lastDataUrl = dataUrl; qrcodeContainer.innerHTML = ''; const img = document.createElement('img'); img.src = dataUrl; img.alt='QR code'; img.style.maxWidth='100%'; img.style.height='auto'; qrcodeContainer.appendChild(img); log('生成完了'); }
-
+    // イベントリスナーの登録
     btnGen.addEventListener('click', generate);
 
-    btnDownload.addEventListener('click', ()=>{ if (!lastDataUrl){ alert('まずQRコードを生成してください'); return; } const a = document.createElement('a'); a.href = lastDataUrl; const safeName = (elText.value||'qr').slice(0,40).replace(/[^a-zA-Z0-9\-]/g,'_')||'qr'; a.download = safeName + '.png'; document.body.appendChild(a); a.click(); a.remove(); });
+    // 画像のダウンロード処理
+    btnDownload.addEventListener('click', () => {
+      if (canvas.style.display === 'none') {
+        alert('先に「QRコードを作る」ボタンを押してください');
+        return;
+      }
+      const dataUrl = canvas.toDataURL('image/png');
+      const a = document.createElement('a');
+      a.href = dataUrl;
+      a.download = 'qrcode.png';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    });
 
-    btnCopyLink.addEventListener('click', async ()=>{ if (!lastDataUrl){ alert('まずQRコードを生成してください'); return; } try{ await navigator.clipboard.writeText(lastDataUrl); alert('画像データURLをコピーしました'); } catch(e){ alert('コピーに失敗しました'); } });
-
-    btnCopyText.addEventListener('click', async ()=>{ const t = elText.value.trim(); if (!t){ alert('テキストが空です'); return; } try{ await navigator.clipboard.writeText(t); alert('テキストをコピーしました'); } catch(e){ alert('コピーに失敗しました'); } });
-
-    btnShareWiFi.addEventListener('click', ()=>{ const s = makeWifiString(); navigator.clipboard.writeText(s).then(()=>alert('Wi‑Fiフォーマットをコピーしました'),()=>alert('コピーに失敗しました')); });
-
-    // initial sample
-    elText.value = 'https://azarasimidi.f5.si';
-    // show hint in libbox
-    libbox.textContent = '// ここに qrcode.min.js の中身を貼るとオフラインで動きます\\n// 例: https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js の内容を貼る\\n';
-    // try CDN load silently
-    ensureLibrary().catch(()=>{});
+    // 初期サンプルテキスト
+    elText.value = 'https://example.com';
   </script>
 </body>
 </html>
