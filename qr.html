@@ -3,13 +3,22 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>カスタムQRコードメーカー</title>
+  <title>あざらしツールズ | カスタムQRコードメーカー</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@500;700&family=M+PLUS+Rounded+1c:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
   <style>
     :root {
       --bg: #0f172a;
       --card: #1e293b;
-      --accent: #06b6d4;
-      --accent-hover: #0891b2;
+      --accent: #38bdf8;
+      --accent-hover: #0ea5e9;
+      --accent-bg: rgba(56, 189, 248, 0.1);
       --text: #f8fafc;
       --muted: #94a3b8;
       --border: #334155;
@@ -22,76 +31,95 @@
     }
 
     body {
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+      font-family: 'M PLUS Rounded 1c', system-ui, sans-serif;
       background-color: var(--bg);
       color: var(--text);
       min-height: 100vh;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      padding: 24px 16px;
     }
 
     .card {
       background-color: var(--card);
-      padding: 24px;
-      border-radius: 16px;
+      padding: 28px;
+      border-radius: 24px;
       max-width: 850px;
       width: 100%;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
       border: 1px solid var(--border);
     }
 
+    .header-area {
+      margin-bottom: 24px;
+      text-align: center;
+    }
+
     h1 {
-      font-size: 20px;
-      margin-bottom: 6px;
+      font-family: 'Kiwi Maru', serif;
+      font-size: 24px;
+      color: #f1f5f9;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
     }
 
     p.lead {
       color: var(--muted);
-      font-size: 13px;
-      margin-bottom: 20px;
+      font-size: 14px;
+      line-height: 1.5;
     }
 
     .grid {
       display: flex;
-      gap: 24px;
+      gap: 28px;
       flex-wrap: wrap;
     }
 
     .controls {
       flex: 1;
-      min-width: 300px;
+      min-width: 290px;
     }
 
+    /* モード切替タブ */
     .mode-tabs {
       display: flex;
-      gap: 8px;
-      margin-bottom: 16px;
-      background: rgba(0, 0, 0, 0.2);
-      padding: 4px;
-      border-radius: 10px;
+      gap: 6px;
+      margin-bottom: 20px;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 6px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
     }
 
     .tab {
       flex: 1;
       text-align: center;
-      padding: 8px;
-      border-radius: 8px;
+      padding: 10px;
+      border-radius: 10px;
       font-size: 14px;
+      font-weight: 700;
       cursor: pointer;
       color: var(--muted);
       transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
     }
 
     .tab.active {
       background: var(--accent);
-      color: #000;
-      font-weight: bold;
+      color: #0f172a;
+      box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
     }
 
     .group {
-      margin-bottom: 16px;
+      margin-bottom: 18px;
     }
 
     .row {
@@ -106,51 +134,65 @@
     label {
       display: block;
       font-size: 13px;
-      color: var(--muted);
+      font-weight: 700;
+      color: #cbd5e1;
       margin-bottom: 6px;
+    }
+
+    /* わかりやすいヒント注釈 */
+    .hint {
+      display: block;
+      font-size: 11px;
+      color: var(--accent);
+      margin-top: 4px;
+      font-weight: normal;
     }
 
     input[type=text], textarea, select {
       width: 100%;
-      padding: 10px 12px;
-      border-radius: 8px;
+      padding: 12px;
+      border-radius: 12px;
       border: 1px solid var(--border);
-      background: rgba(0, 0, 0, 0.2);
+      background: rgba(0, 0, 0, 0.25);
       color: inherit;
       font-size: 14px;
+      font-family: inherit;
       outline: none;
+      transition: border-color 0.2s;
     }
 
     input[type=color] {
       width: 100%;
-      height: 40px;
-      border-radius: 8px;
+      height: 44px;
+      border-radius: 12px;
       border: 1px solid var(--border);
-      background: rgba(0, 0, 0, 0.2);
+      background: rgba(0, 0, 0, 0.25);
       cursor: pointer;
       padding: 4px;
     }
 
     input[type=file] {
-      font-size: 13px;
+      font-size: 12px;
       color: var(--muted);
+      width: 100%;
     }
 
     input:focus, textarea:focus, select:focus {
       border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
     }
 
     .logo-preview-wrapper {
       display: flex;
       align-items: center;
       gap: 10px;
-      margin-top: 8px;
+      margin-top: 10px;
     }
 
     .logo-preview {
       width: 48px;
       height: 48px;
-      border-radius: 6px;
+      border-radius: 8px;
       object-fit: contain;
       background: #fff;
       border: 1px solid var(--border);
@@ -160,24 +202,29 @@
     .btn-group {
       display: flex;
       gap: 10px;
-      margin-top: 20px;
+      margin-top: 24px;
     }
 
     button {
       flex: 1;
       background: var(--accent);
       border: none;
-      padding: 12px;
-      border-radius: 10px;
-      color: #000;
-      font-weight: bold;
+      padding: 14px;
+      border-radius: 12px;
+      color: #0f172a;
+      font-weight: 800;
       font-size: 14px;
       cursor: pointer;
-      transition: background 0.2s;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
     }
 
     button:hover {
       background: var(--accent-hover);
+      transform: translateY(-1px);
     }
 
     button.secondary {
@@ -188,38 +235,47 @@
 
     button.secondary:hover {
       background: rgba(255, 255, 255, 0.05);
+      border-color: var(--muted);
     }
 
     button.small-btn {
-      padding: 6px 10px;
+      padding: 6px 12px;
       font-size: 12px;
       flex: none;
     }
 
     .preview {
-      width: 300px;
+      width: 320px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       gap: 16px;
-      padding: 20px;
-      border-radius: 12px;
-      background: rgba(0, 0, 0, 0.2);
-      border: 1px dashed var(--border);
+      padding: 24px;
+      border-radius: 18px;
+      background: rgba(0, 0, 0, 0.25);
+      border: 2px dashed var(--border);
     }
 
     #qrcodeCanvas {
       background: white;
       padding: 12px;
-      border-radius: 8px;
+      border-radius: 12px;
       max-width: 100%;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
     }
 
     .placeholder-text {
       color: var(--muted);
       font-size: 13px;
       text-align: center;
+      line-height: 1.6;
+    }
+
+    .placeholder-icon {
+      font-size: 40px;
+      color: var(--border);
+      margin-bottom: 8px;
     }
 
     @media (max-width: 680px) {
@@ -233,33 +289,37 @@
 <body>
 
   <div class="card">
-    <h1>かんたんデザインQRコードメーカー</h1>
-    <p class="lead">色や形、中央ロゴをお好みでカスタマイズしてQRコードを作成できます。</p>
+    <div class="header-area">
+      <h1><i class="fa-solid fa-qrcode" style="color: var(--accent);"></i> 簡単デザインQRコードメーカー</h1>
+      <p class="lead">Webサイトのアドレス（URL）やWi-Fi情報を入れるだけで、誰でも可愛いQRコードが作れます！</p>
+    </div>
 
     <div class="grid">
       <div class="controls">
         <!-- モード切替タブ -->
         <div class="mode-tabs">
-          <div class="tab active" data-mode="normal">URL・文字</div>
-          <div class="tab" data-mode="wifi">Wi‑Fi用</div>
+          <div class="tab active" data-mode="normal"><i class="fa-solid fa-link"></i> サイト・文字</div>
+          <div class="tab" data-mode="wifi"><i class="fa-solid fa-wifi"></i> Wi-Fi接続用</div>
         </div>
 
         <!-- 通常モード -->
         <div id="mode-normal">
           <div class="group">
-            <label for="text">作成したいURLやメッセージ</label>
-            <textarea id="text" rows="3" placeholder="例: https://example.com や こんにちは！"></textarea>
+            <label for="text">作成したいWebサイトのURLやメッセージ</label>
+            <textarea id="text" rows="3" placeholder="例: https://example.com"></textarea>
+            <span class="hint">💡 「URL」とは「https://〜」から始まるページのWeb上の住所のことです。開きたいページのURLをそのままコピーして貼り付けてね！</span>
           </div>
         </div>
 
         <!-- Wi-Fiモード -->
         <div id="mode-wifi" style="display:none">
           <div class="group">
-            <label for="wifi-ssid">ネットワーク名 (SSID)</label>
+            <label for="wifi-ssid">Wi-Fiのお名前 (SSID)</label>
             <input id="wifi-ssid" type="text" placeholder="例: MyHome-WiFi">
+            <span class="hint">💡 ルーターの裏面などに書いてあるネットワーク名を入力してね。</span>
           </div>
           <div class="group">
-            <label for="wifi-pass">パスワード</label>
+            <label for="wifi-pass">Wi-Fiのパスワード</label>
             <input id="wifi-pass" type="text" placeholder="例: password1234">
           </div>
         </div>
@@ -268,7 +328,7 @@
         <div class="group row">
           <div>
             <label for="fgColor">QRコードの色</label>
-            <input type="color" id="fgColor" value="#000000">
+            <input type="color" id="fgColor" value="#0f172a">
           </div>
           <div>
             <label for="bgColor">背景の色</label>
@@ -277,34 +337,37 @@
         </div>
 
         <div class="group">
-          <label for="dotStyle">ドットの形状</label>
+          <label for="dotStyle">ドットの形</label>
           <select id="dotStyle">
-            <option value="square">四角（標準）</option>
-            <option value="dots">丸（ドット）</option>
+            <option value="square">四角（標準的で読み取りやすい）</option>
+            <option value="dots">丸（やわらかいデザイン）</option>
           </select>
         </div>
 
         <!-- ロゴ設定 -->
         <div class="group">
-          <label>中央ロゴ画像</label>
+          <label>真ん中に入れるアイコン画像（任意）</label>
           <input type="file" id="logoFile" accept="image/*">
           <div class="logo-preview-wrapper">
             <img id="logoPreview" class="logo-preview" alt="ロゴプレビュー">
-            <button id="clearLogo" class="secondary small-btn" style="display:none">ロゴを消す</button>
+            <button id="clearLogo" class="secondary small-btn" style="display:none"><i class="fa-solid fa-xmark"></i> 消去</button>
           </div>
         </div>
 
         <!-- アクションボタン -->
         <div class="btn-group">
-          <button id="generate">QRコードを作る</button>
-          <button id="download" class="secondary">画像として保存</button>
+          <button id="generate"><i class="fa-solid fa-wand-magic-sparkles"></i> QRコードを作る</button>
+          <button id="download" class="secondary"><i class="fa-solid fa-download"></i> 画像を保存</button>
         </div>
       </div>
 
       <!-- プレビュー表示エリア -->
       <div class="preview">
         <canvas id="qrcodeCanvas" style="display:none"></canvas>
-        <div id="placeholder" class="placeholder-text">ここにQRコードが<br>表示されます</div>
+        <div id="placeholder" class="placeholder-text">
+          <div class="placeholder-icon"><i class="fa-solid fa-qrcode"></i></div>
+          文字やURLを入力して<br>「QRコードを作る」を押すと<br>ここに表示されます！
+        </div>
       </div>
     </div>
   </div>
@@ -348,6 +411,7 @@
           modeNormal.style.display = 'block';
           modeWifi.style.display = 'none';
         }
+        generate();
       });
     });
 
@@ -362,6 +426,7 @@
         logoPreview.src = userLogoData;
         logoPreview.style.display = 'block';
         clearLogo.style.display = 'inline-block';
+        generate();
       };
       reader.readAsDataURL(file);
     });
@@ -373,6 +438,7 @@
       logoPreview.src = '';
       logoPreview.style.display = 'none';
       clearLogo.style.display = 'none';
+      generate();
     });
 
     // Wi-Fi文字列の生成
@@ -401,20 +467,21 @@
 
       if (currentMode === 'wifi') {
         if (!wifiSsid.value.trim()) {
-          alert('ネットワーク名（SSID）を入力してください');
+          placeholder.style.display = 'block';
+          canvas.style.display = 'none';
           return;
         }
         content = makeWifiString();
       } else {
         content = elText.value.trim();
         if (!content) {
-          alert('URLまたはメッセージを入力してください');
+          placeholder.style.display = 'block';
+          canvas.style.display = 'none';
           return;
         }
       }
 
       try {
-        // ロゴを重ねるため、誤り訂正レベルを「H（最高: 30%）」に設定
         const qr = QRCode.create(content, { errorCorrectionLevel: 'H' });
         const modules = qr.modules;
         const count = modules.size;
@@ -430,7 +497,7 @@
         ctx.fillStyle = bgColor.value;
         ctx.fillRect(0, 0, size, size);
 
-        // ドットの描画処理
+        // ドット描画
         ctx.fillStyle = fgColor.value;
         const isCircle = dotStyle.value === 'dots';
 
@@ -440,7 +507,6 @@
               const x = (col + margin) * cellSize;
               const y = (row + margin) * cellSize;
 
-              // 四角い検出パターン（位置合わせマーク）の周りは丸めずそのまま描画
               const isFinderPattern = 
                 (row < 7 && col < 7) || 
                 (row < 7 && col >= count - 7) || 
@@ -457,45 +523,52 @@
           }
         }
 
-        // ロゴを重ねる処理
+        // ロゴ描画
         if (userLogoData) {
           const logo = new Image();
           logo.src = userLogoData;
           await new Promise((resolve) => {
             logo.onload = () => {
-              const logoSize = size * 0.22; // 中央22%の大きさ
+              const logoSize = size * 0.22;
               const lx = (size - logoSize) / 2;
               const ly = (size - logoSize) / 2;
 
-              // ロゴの背景に白（指定背景色）の枠を描いて視認性を確保
               ctx.fillStyle = bgColor.value;
               roundRect(ctx, lx - 4, ly - 4, logoSize + 8, logoSize + 8, 6);
               ctx.fill();
 
-              // ロゴ画像を描画
               ctx.drawImage(logo, lx, ly, logoSize, logoSize);
               resolve();
             };
           });
         }
 
-        // プレビュー表示切り替え
         placeholder.style.display = 'none';
         canvas.style.display = 'block';
 
       } catch (e) {
         console.error(e);
-        alert('QRコードの生成に失敗しました');
       }
     }
 
-    // イベントリスナーの登録
-    btnGen.addEventListener('click', generate);
+    // リアルタイム更新（文字や色を変えたら即座に反映）
+    [elText, wifiSsid, wifiPass, fgColor, bgColor, dotStyle].forEach(el => {
+      el.addEventListener('input', generate);
+      el.addEventListener('change', generate);
+    });
 
-    // 画像のダウンロード処理
+    btnGen.addEventListener('click', () => {
+      if ((currentMode === 'normal' && !elText.value.trim()) || (currentMode === 'wifi' && !wifiSsid.value.trim())) {
+        alert('まずはテキストやURLを入力してね！');
+        return;
+      }
+      generate();
+    });
+
+    // 画像ダウンロード
     btnDownload.addEventListener('click', () => {
       if (canvas.style.display === 'none') {
-        alert('先に「QRコードを作る」ボタンを押してください');
+        alert('まずはURLや文字を入力してQRコードを作成してね！');
         return;
       }
       const dataUrl = canvas.toDataURL('image/png');
@@ -507,8 +580,9 @@
       a.remove();
     });
 
-    // 初期サンプルテキスト
+    // 初期入力例
     elText.value = 'https://example.com';
+    generate();
   </script>
 </body>
 </html>
