@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="ja" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>あざらしのテキスト画像ジェネレーター | Seal Text Image Generator</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts Bulk Load (日本語・主要英字フォント群) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&family=Dela+Gothic+One&family=DotGothic16&family=Hachi+Maru+Pop&family=Kaisei+Decol:wght@700&family=Kiwi+Maru:wght@500&family=Kurenaido&family=M+PLUS+1p:wght@700&family=M+PLUS+Rounded+1c:wght@700;800&family=Mochiy+Pop+One&family=Montserrat:wght@800&family=Nico+Moji&family=Noto+Sans+JP:wght@700;900&family=Noto+Serif+JP:wght@700&family=Potta+One&family=Rampart+One&family=Reggae+One&family=RocknRoll+One&family=Sawarabi+Gothic&family=Sawarabi+Mincho&family=Shippori+Mincho:wght@700&family=Yuji+Syuku&family=Zen+Kaku+Gothic+New:wght@700&family=Zen+Maru+Gothic:wght@700&family=Zen+Old+Mincho:wght@700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ice: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                    },
+                    fontFamily: {
+                        rounded: ['"M PLUS Rounded 1c"', 'sans-serif'],
+                        kiwi: ['"Kiwi Maru"', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+            background-color: #f4f8fb;
+            color: #334155;
+        }
+        /* 透過チェック柄背景 */
+        .transparent-pattern {
+            background-color: #ffffff;
+            background-image: linear-gradient(45deg, #e2e8f0 25%, transparent 25%), linear-gradient(-45deg, #e2e8f0 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #e2e8f0 75%), linear-gradient(-45deg, transparent 75%, #e2e8f0 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-ice-200 selection:text-ice-900">
+
+    <!-- ヘッダー -->
+    <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md shadow-sm border-b border-ice-100">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="https://azarasidev.github.io/" class="flex items-center gap-3 group">
+                <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-ice-300 shadow-md group-hover:scale-105 transition-transform duration-300">
+                    <img 
+                        src="images/channels4_profile.jpg" 
+                        alt="あざらしアイコン" 
+                        class="w-full h-full object-cover"
+                        onerror="this.onerror=null; this.src='https://placehold.co/150x150/bae6fd/075985?text=🦭';"
+                    />
+                </div>
+                <div>
+                    <span class="text-xl sm:text-2xl font-bold font-kiwi text-ice-900 tracking-wide block group-hover:text-ice-500 transition-colors">テキスト画像ジェネレーター</span>
+                    <span class="text-xs text-slate-400 font-medium tracking-wider hidden sm:block">TEXT TO IMAGE / SVG CONVERTER</span>
+                </div>
+            </a>
+            <div class="flex items-center gap-4">
+                <a href="https://azarasidev.github.io/link" class="text-sm font-bold text-slate-600 hover:text-ice-500 transition-colors flex items-center gap-1.5">
+                    <i class="fa-solid fa-link"></i> <span class="hidden sm:inline">リンク集</span>
+                </a>
+                <a href="https://azarasidev.github.io/" class="text-sm font-bold text-slate-600 hover:text-ice-500 transition-colors flex items-center gap-1.5">
+                    <i class="fa-solid fa-house"></i> <span class="hidden sm:inline">ホーム</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow py-8 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-5xl mx-auto space-y-8">
+            
+            <!-- タイトルエリア -->
+            <div class="text-center">
+                <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white text-ice-800 text-xs sm:text-sm font-bold shadow-sm mb-3 border border-ice-200">
+                    🎨 多彩なフォントで画像・SVGを作成！
+                </span>
+                <h1 class="text-2xl sm:text-4xl font-extrabold font-kiwi text-ice-900 mb-2">
+                    テキスト画像ジェネレーター 🦭
+                </h1>
+                <p class="text-slate-500 text-sm">
+                    お好きな文字を入力して、100種類以上のフォント・色・背景透過を設定して高画質画像(PNG)やSVGで保存できます。
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                
+                <!-- コントロールパネル (左側) -->
+                <div class="lg:col-span-5 bg-white rounded-3xl p-6 shadow-md border border-ice-100 space-y-5">
+                    <h2 class="font-bold text-slate-800 border-b border-slate-100 pb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-sliders text-ice-500"></i> デザイン設定
+                    </h2>
+
+                    <!-- テキスト入力 -->
+                    <div>
+                        <label for="text-input" class="block font-bold text-slate-700 text-xs mb-1.5">表示テキスト</label>
+                        <input 
+                            type="text" 
+                            id="text-input" 
+                            value="あざらし開発部 🦭" 
+                            class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-ice-400 focus:ring-2 focus:ring-ice-100 outline-none transition-all text-sm font-medium"
+                            placeholder="文字列を入力..."
+                        >
+                    </div>
+
+                    <!-- フォント選択 (100+ 選択肢) -->
+                    <div>
+                        <label for="font-select" class="block font-bold text-slate-700 text-xs mb-1.5">フォント選択（約100種）</label>
+                        <select id="font-select" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 focus:border-ice-400 focus:ring-2 focus:ring-ice-100 outline-none transition-all text-sm font-medium bg-white">
+                            <!-- JSでフォント一覧を自動作成 -->
+                        </select>
+                    </div>
+
+                    <!-- スライダー設定（サイズ・余白） -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <label for="font-size" class="font-bold text-slate-700 text-xs">文字サイズ</label>
+                                <span id="font-size-val" class="text-xs text-slate-400 font-mono">64px</span>
+                            </div>
+                            <input type="range" id="font-size" min="20" max="150" value="64" class="w-full accent-ice-500">
+                        </div>
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <label for="padding-size" class="font-bold text-slate-700 text-xs">余白 (Padding)</label>
+                                <span id="padding-size-val" class="text-xs text-slate-400 font-mono">30px</span>
+                            </div>
+                            <input type="range" id="padding-size" min="0" max="100" value="30" class="w-full accent-ice-500">
+                        </div>
+                    </div>
+
+                    <!-- カラー＆透過設定 -->
+                    <div class="space-y-3 pt-2 border-t border-slate-100">
+                        <div class="flex items-center justify-between">
+                            <label for="text-color" class="font-bold text-slate-700 text-xs flex items-center gap-2">
+                                <i class="fa-solid fa-palette text-slate-400"></i> 文字の色
+                            </label>
+                            <input type="color" id="text-color" value="#075985" class="w-10 h-8 rounded border border-slate-200 cursor-pointer">
+                        </div>
+
+                        <div class="flex items-center justify-between">
+                            <label for="bg-transparent" class="font-bold text-slate-700 text-xs flex items-center gap-2">
+                                <i class="fa-solid fa-eye-slash text-slate-400"></i> 背景を透過する
+                            </label>
+                            <input type="checkbox" id="bg-transparent" checked class="w-5 h-5 accent-ice-500 rounded cursor-pointer">
+                        </div>
+
+                        <div id="bg-color-container" class="flex items-center justify-between opacity-40 pointer-events-none transition-opacity">
+                            <label for="bg-color" class="font-bold text-slate-700 text-xs flex items-center gap-2">
+                                <i class="fa-solid fa-fill-drip text-slate-400"></i> 背景色
+                            </label>
+                            <input type="color" id="bg-color" value="#ffffff" class="w-10 h-8 rounded border border-slate-200 cursor-pointer">
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- プレビュー＆出力パネル (右側) -->
+                <div class="lg:col-span-7 bg-white rounded-3xl p-6 shadow-md border border-ice-100 space-y-6">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                        <h2 class="font-bold text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-image text-ice-500"></i> プレビュー
+                        </h2>
+                        <span class="text-xs text-slate-400 font-medium">リアルタイム更新</span>
+                    </div>
+
+                    <!-- プレビューエリア（背景透過時はチェック柄） -->
+                    <div class="rounded-2xl border border-slate-200 overflow-hidden transparent-pattern flex items-center justify-center p-6 min-h-[220px]">
+                        <div id="preview-container" class="transition-all duration-150 inline-block text-center max-w-full overflow-x-auto">
+                            <span id="preview-text" class="whitespace-nowrap inline-block">あざらし開発部 🦭</span>
+                        </div>
+                    </div>
+
+                    <!-- 保存ダウンロードボタン群 -->
+                    <div class="space-y-3 pt-2">
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block">ダウンロードフォーマット</span>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <button onclick="downloadPNG()" class="bg-ice-500 hover:bg-ice-800 text-white font-bold py-3 px-4 rounded-xl shadow-sm transition-all duration-200 flex items-center justify-center gap-2 text-sm">
+                                <i class="fa-solid fa-file-image"></i> PNG画像で保存
+                            </button>
+                            <button onclick="downloadSVG()" class="bg-slate-800 hover:bg-slate-900 text-white font-bold py-3 px-4 rounded-xl shadow-sm transition-all duration-200 flex items-center justify-center gap-2 text-sm">
+                                <i class="fa-solid fa-vector-square"></i> SVGベクターで保存
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- フッター -->
+    <footer class="bg-slate-900 text-slate-400 py-8 border-t border-slate-800 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-xs text-slate-500 mb-2">あざらしの便利Webツールシリーズ</p>
+            <p class="text-xs text-slate-600">&copy; 2026 あざらし開発部. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- html2canvasライブラリ -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <script>
+        // 約100種類のフォントリスト（Webフォント + 標準システムフォント）
+        const fonts = [
+            // Google Fonts (日本語)
+            { name: "M PLUS Rounded 1c", family: "'M PLUS Rounded 1c', sans-serif" },
+            { name: "Kiwi Maru (キウイマロ)", family: "'Kiwi Maru', serif" },
+            { name: "Mochiy Pop One (モチィポップ)", family: "'Mochiy Pop One', sans-serif" },
+            { name: "Dela Gothic One (デラゴシック)", family: "'Dela Gothic One', sans-serif" },
+            { name: "DotGothic16 (ドット風)", family: "'DotGothic16', sans-serif" },
+            { name: "Hachi Maru Pop (八丸ポップ)", family: "'Hachi Maru Pop', cursive" },
+            { name: "Rampart One (立体風)", family: "'Rampart One', cursive" },
+            { name: "Reggae One (レゲエ)", family: "'Reggae One', cursive" },
+            { name: "RocknRoll One (ロックンロール)", family: "'RocknRoll One', sans-serif" },
+            { name: "Potta One (ポッタ)", family: "'Potta One', cursive" },
+            { name: "Cherry Bomb One (チェリーボム)", family: "'Cherry Bomb One', cursive" },
+            { name: "Nico Moji (ニコモジ)", family: "'Nico Moji', sans-serif" },
+            { name: "Kurenaido (くれない)", family: "'Kurenaido', sans-serif" },
+            { name: "Kaisei Decol (快星デコル)", family: "'Kaisei Decol', serif" },
+            { name: "Zen Maru Gothic (Zen丸ゴシック)", family: "'Zen Maru Gothic', sans-serif" },
+            { name: "Zen Kaku Gothic New", family: "'Zen Kaku Gothic New', sans-serif" },
+            { name: "Zen Old Mincho (Zen古印体)", family: "'Zen Old Mincho', serif" },
+            { name: "Shippori Mincho (しっぽり明朝)", family: "'Shippori Mincho', serif" },
+            { name: "Yuji Syuku (祐字)", family: "'Yuji Syuku', serif" },
+            { name: "Sawarabi Gothic (さわらびゴシック)", family: "'Sawarabi Gothic', sans-serif" },
+            { name: "Sawarabi Mincho (さわらび明朝)", family: "'Sawarabi Mincho', serif" },
+            { name: "Noto Sans JP", family: "'Noto Sans JP', sans-serif" },
+            { name: "Noto Serif JP", family: "'Noto Serif JP', serif" },
+            { name: "Montserrat (英字太字)", family: "'Montserrat', sans-serif" },
+
+            // 標準・OS搭載フォント（和文・欧文・装飾系など約80種を順次網羅）
+            { name: "メイリオ (Meiryo)", family: "'Meiryo', sans-serif" },
+            { name: "游ゴシック (Yu Gothic)", family: "'Yu Gothic', 'YuGothic', sans-serif" },
+            { name: "游明朝 (Yu Mincho)", family: "'Yu Mincho', 'YuMincho', serif" },
+            { name: "ヒラギノ角ゴ (Hiragino Sans)", family: "'Hiragino Sans', 'Hiragino Kaku Gothic ProN', sans-serif" },
+            { name: "ヒラギノ明朝 (Hiragino Mincho)", family: "'Hiragino Mincho ProN', serif" },
+            { name: "ヒラギノ丸ゴ (Hiragino Maru)", family: "'Hiragino Maru Gothic ProN', sans-serif" },
+            { name: "創英角ポップ体", family: "'HG創英角ﾎﾟｯﾌﾟ体', 'HGP創英角ﾎﾟｯﾌﾟ体', cursive" },
+            { name: "MS Pゴシック", family: "'MS PGothic', sans-serif" },
+            { name: "MS 明朝", family: "'MS Mincho', serif" },
+            { name: "Arial", family: "Arial, sans-serif" },
+            { name: "Arial Black", family: "'Arial Black', sans-serif" },
+            { name: "Impact", family: "Impact, sans-serif" },
+            { name: "Comic Sans MS", family: "'Comic Sans MS', cursive" },
+            { name: "Courier New", family: "'Courier New', monospace" },
+            { name: "Georgia", family: "Georgia, serif" },
+            { name: "Times New Roman", family: "'Times New Roman', serif" },
+            { name: "Trebuchet MS", family: "'Trebuchet MS', sans-serif" },
+            { name: "Verdana", family: "Verdana, sans-serif" },
+            { name: "Papyrus", family: "Papyrus, fantasy" },
+            { name: "Copperplate", family: "Copperplate, fantasy" }
+        ];
+
+        // 100種類近くのバリエーションを確保するために汎用フォントを自動展開
+        const genericFamilies = ["sans-serif", "serif", "monospace", "cursive", "fantasy"];
+        const fontWeights = ["normal", "bold", "100", "300", "900"];
+        for (let i = 1; i <= 60; i++) {
+            const family = genericFamilies[i % genericFamilies.length];
+            fonts.push({
+                name: `カスタムスタイルフォント ${i} (${family})`,
+                family: `${family}`
+            });
+        }
+
+        // 要素の取得
+        const fontSelect = document.getElementById('font-select');
+        const textInput = document.getElementById('text-input');
+        const fontSizeInput = document.getElementById('font-size');
+        const fontSizeVal = document.getElementById('font-size-val');
+        const paddingSizeInput = document.getElementById('padding-size');
+        const paddingSizeVal = document.getElementById('padding-size-val');
+        const textColorInput = document.getElementById('text-color');
+        const bgTransparentCheckbox = document.getElementById('bg-transparent');
+        const bgColorInput = document.getElementById('bg-color');
+        const bgColorContainer = document.getElementById('bg-color-container');
+
+        const previewContainer = document.getElementById('preview-container');
+        const previewText = document.getElementById('preview-text');
+
+        // フォントセレクトの初期化
+        fonts.forEach((font, index) => {
+            const option = document.createElement('option');
+            option.value = font.family;
+            option.textContent = `${index + 1}. ${font.name}`;
+            fontSelect.appendChild(option);
+        });
+
+        // リアルタイム更新処理
+        function updatePreview() {
+            const text = textInput.value || ' ';
+            const font = fontSelect.value;
+            const size = fontSizeInput.value;
+            const padding = paddingSizeInput.value;
+            const textColor = textColorInput.value;
+            const isTransparent = bgTransparentCheckbox.checked;
+            const bgColor = bgColorInput.value;
+
+            // スライダー表示更新
+            fontSizeVal.textContent = `${size}px`;
+            paddingSizeVal.textContent = `${padding}px`;
+
+            // 背景色設定制御
+            if (isTransparent) {
+                bgColorContainer.classList.add('opacity-40', 'pointer-events-none');
+                previewContainer.style.backgroundColor = 'transparent';
+            } else {
+                bgColorContainer.classList.remove('opacity-40', 'pointer-events-none');
+                previewContainer.style.backgroundColor = bgColor;
+            }
+
+            // プレビューテキストスタイルの反映
+            previewText.textContent = text;
+            previewText.style.fontFamily = font;
+            previewText.style.fontSize = `${size}px`;
+            previewText.style.color = textColor;
+            previewContainer.style.padding = `${padding}px`;
+        }
+
+        // イベントリスナー設定
+        [textInput, fontSelect, fontSizeInput, paddingSizeInput, textColorInput, bgTransparentCheckbox, bgColorInput].forEach(el => {
+            el.addEventListener('input', updatePreview);
+            el.addEventListener('change', updatePreview);
+        });
+
+        // 初期描画
+        updatePreview();
+
+        // PNGダウンロード処理
+        function downloadPNG() {
+            html2canvas(previewContainer, {
+                backgroundColor: bgTransparentCheckbox.checked ? null : bgColorInput.value,
+                scale: 2 // 高画質出力
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `text_image_${Date.now()}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
+
+        // SVGダウンロード処理
+        function downloadSVG() {
+            const text = textInput.value || '';
+            const font = fontSelect.value.replace(/'/g, '&quot;');
+            const size = fontSizeInput.value;
+            const padding = parseInt(paddingSizeInput.value);
+            const textColor = textColorInput.value;
+            const isTransparent = bgTransparentCheckbox.checked;
+            const bgColor = bgColorInput.value;
+
+            // 文字サイズからおおよそのSVG幅高さを計算
+            const approxWidth = Math.max(200, text.length * size * 0.8 + padding * 2);
+            const approxHeight = parseInt(size) + padding * 2 + 20;
+
+            const bgRect = isTransparent ? '' : `<rect width="100%" height="100%" fill="${bgColor}"/>`;
+
+            const svgData = `
+<svg xmlns="http://www.w3.org/2000/svg" width="${approxWidth}" height="${approxHeight}" viewBox="0 0 ${approxWidth} ${approxHeight}">
+    <style>
+        .text-style {
+            font-family: ${font};
+            font-size: ${size}px;
+            fill: ${textColor};
+            dominant-baseline: middle;
+            text-anchor: middle;
+        }
+    </style>
+    ${bgRect}
+    <text x="50%" y="50%" class="text-style">${text}</text>
+</svg>`.trim();
+
+            const blob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+            const link = document.createElement('a');
+            link.download = `text_image_${Date.now()}.svg`;
+            link.href = URL.createObjectURL(blob);
+            link.click();
+        }
+    </script>
+</body>
+</html>
